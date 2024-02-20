@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bubble-visit"
+dependencies = []
+dynamic = ["version"]
+
+[project.scripts]
+bubble-visit = "bubble_visit.gui:run"
+
+[tool.setuptools.dynamic]
+version = {attr = "bubble_visit.gui.VERSION"}
