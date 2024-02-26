@@ -4,7 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bubble-visit"
-dependencies = []
+dependencies = [
+    "platformdirs",
+]
 dynamic = ["version"]
 
 [project.scripts]
