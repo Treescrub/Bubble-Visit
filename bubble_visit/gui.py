@@ -43,6 +43,12 @@ def run():
     insert_system_button = ttk.Button(frame, text="Insert system", command=insert_system)
     insert_system_button.pack()
 
+    setup_menu(window)
+
+    window.mainloop()
+
+
+def setup_menu(window):
     menubar = Menu(window)
     window["menu"] = menubar
 
@@ -50,5 +56,3 @@ def run():
     menu_file.add_command(label="Test")
 
     menubar.add_cascade(menu=menu_file, label="File")
-
-    window.mainloop()
