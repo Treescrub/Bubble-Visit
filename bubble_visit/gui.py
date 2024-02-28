@@ -2,19 +2,25 @@ from tkinter import *
 from tkinter import ttk
 import pathlib
 
-from bubble_visit import database
+from bubble_visit.database import Database
 from bubble_visit import configuration
 
 
 VERSION = "0.1.0"
 
+database_connection: Database
 
-def init_tables():
-    pathlib.Path(configuration.data_folder_path()).mkdir(exist_ok=True)
-    database.init_tables(configuration.database_path())
+
+def insert_system():
+    database_connection.insert_system(123456789, [1.0, 2.0, 3.0])
 
 
 def run():
+    global database_connection
+
+    pathlib.Path(configuration.data_folder_path()).mkdir(parents=True, exist_ok=True)
+    database_connection = Database(configuration.database_path())
+
     window = Tk()
     window.title("Bubble Visit")
     window.option_add("*tearOff", FALSE)
@@ -34,8 +40,8 @@ def run():
     button = ttk.Button(frame, text="Mark sector as finished")
     button.pack()
 
-    init_tables_button = ttk.Button(frame, text="Init tables", command=init_tables)
-    init_tables_button.pack()
+    insert_system_button = ttk.Button(frame, text="Insert system", command=insert_system)
+    insert_system_button.pack()
 
     menubar = Menu(window)
     window["menu"] = menubar
