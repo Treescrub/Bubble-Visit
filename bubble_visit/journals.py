@@ -2,7 +2,7 @@ import json
 
 
 def get_windows_path() -> str:
-    return "%USERPROFILE%/Saved Games/Frontier Developments/Elite Dangerous"
+    return "~/Saved Games/Frontier Developments/Elite Dangerous"
 
 
 def is_journal_file(name: str) -> bool:
