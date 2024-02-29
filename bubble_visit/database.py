@@ -58,7 +58,7 @@ class Database:
 
         cursor.execute("""
             INSERT INTO journals (name) VALUES(?)
-        """, name)
+        """, (name,))
 
         self.connection.commit()
 
@@ -73,8 +73,8 @@ class Database:
         cursor = self.connection.cursor()
 
         result = cursor.execute("""
-            SELECT name FROM journals WHERE name = ? 
-        """, name)
+            SELECT name FROM journals WHERE name = ?
+        """, (name,))
 
         name = result.fetchone()
 
