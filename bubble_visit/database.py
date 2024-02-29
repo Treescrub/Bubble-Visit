@@ -41,7 +41,7 @@ class Database:
         cursor = self.connection.cursor()
 
         cursor.execute("""
-            INSERT INTO systems (address, pos_x, pos_y, pos_z) VALUES(?, ?, ?, ?)
+            INSERT OR REPLACE INTO systems (address, pos_x, pos_y, pos_z) VALUES(?, ?, ?, ?)
         """, (address, coords[0], coords[1], coords[2]))
 
         self.connection.commit()
