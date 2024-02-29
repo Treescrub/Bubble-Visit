@@ -62,6 +62,13 @@ class Database:
 
         self.connection.commit()
 
+    def clear_journals(self):
+        cursor = self.connection.cursor()
+
+        cursor.execute("DELETE FROM journals")
+
+        self.connection.commit()
+
     def has_journal(self, name: str) -> bool:
         cursor = self.connection.cursor()
 
