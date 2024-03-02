@@ -9,25 +9,27 @@ from bubble_visit import configuration, journals
 VERSION = "0.1.0"
 
 database_connection: Database
+main_window: Tk
 
 
-def insert_system():
-    database_connection.insert_system(123456789, [1.0, 2.0, 3.0])
+def refresh_systems():
+    database_connection.clear_journals()
+    database_connection.clear_systems()
+    add_systems()
 
 
 def run():
     global database_connection
+    global main_window
 
     pathlib.Path(configuration.data_folder_path()).mkdir(parents=True, exist_ok=True)
     database_connection = Database(configuration.database_path())
 
-    add_systems()
+    main_window = Tk()
+    main_window.title("Bubble Visit")
+    main_window.option_add("*tearOff", FALSE)
 
-    window = Tk()
-    window.title("Bubble Visit")
-    window.option_add("*tearOff", FALSE)
-
-    frame = ttk.Frame(window, padding=10)
+    frame = ttk.Frame(main_window, padding=10)
     frame.pack()
 
     system_count_frame = ttk.Frame(frame, padding=10)
@@ -42,12 +44,10 @@ def run():
     button = ttk.Button(frame, text="Mark sector as finished")
     button.pack()
 
-    insert_system_button = ttk.Button(frame, text="Insert system", command=insert_system)
-    insert_system_button.pack()
+    setup_menu()
 
-    setup_menu(window)
-
-    window.mainloop()
+    main_window.after(1, add_systems)
+    main_window.mainloop()
 
 
 def add_systems():
@@ -75,21 +75,25 @@ def add_systems():
         new_journals.append(path)
 
     for i in range(len(new_journals)):
-        for event in journals.read_events(new_journals[i]):
-            if event["event"] != "FSDJump":
-                continue
-
-            database_connection.insert_system(event["SystemAddress"], event["StarPos"])
+        add_systems_from_journal(new_journals[i])
 
         if i < len(new_journals) - 1:  # don't add most recent journal to database in case it's still being modified
             database_connection.insert_journal(new_journals[i].name)
 
 
-def setup_menu(window):
-    menubar = Menu(window)
-    window["menu"] = menubar
+def add_systems_from_journal(journal_path):
+    for event in journals.read_events(journal_path):
+        if event["event"] != "FSDJump":
+            continue
+
+        database_connection.insert_system(event["SystemAddress"], event["StarPos"])
+
+
+def setup_menu():
+    menubar = Menu(main_window)
+    main_window["menu"] = menubar
 
     menu_file = Menu(menubar)
-    menu_file.add_command(label="Test")
+    menu_file.add_command(label="Refresh system data", command=refresh_systems)
 
     menubar.add_cascade(menu=menu_file, label="File")
