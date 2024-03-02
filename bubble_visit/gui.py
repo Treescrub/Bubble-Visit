@@ -1,15 +1,20 @@
 from tkinter import *
 from tkinter import ttk
 import pathlib
+import logging
 
 from bubble_visit.database import Database
 from bubble_visit import configuration, journals
 
 
 VERSION = "0.1.0"
+LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 database_connection: Database
 main_window: Tk
+
+logging.basicConfig(filename=configuration.data_folder_path() / "bubblevisit.log", level=logging.INFO, format=LOG_FORMAT)
+logger = logging.getLogger(__name__)
 
 
 def refresh_systems():
@@ -22,7 +27,7 @@ def run():
     global database_connection
     global main_window
 
-    pathlib.Path(configuration.data_folder_path()).mkdir(parents=True, exist_ok=True)
+    configuration.data_folder_path().mkdir(parents=True, exist_ok=True)
     database_connection = Database(configuration.database_path())
 
     main_window = Tk()
@@ -46,11 +51,15 @@ def run():
 
     setup_menu()
 
+    logger.info("Start GUI")
+
     main_window.after(1, add_systems)
     main_window.mainloop()
 
 
 def add_systems():
+    logger.info("Looking for new systems to add")
+
     journal_dir = pathlib.Path(journals.get_windows_path()).expanduser()
 
     if not journal_dir.exists() or not journal_dir.is_dir():
@@ -74,11 +83,16 @@ def add_systems():
 
         new_journals.append(path)
 
+    logger.info(f"Found {len(new_journals)} new journals")
+
     for i in range(len(new_journals)):
+        logger.debug(f"Getting systems from journal: '{new_journals[i].name}'")
         add_systems_from_journal(new_journals[i])
 
         if i < len(new_journals) - 1:  # don't add most recent journal to database in case it's still being modified
             database_connection.insert_journal(new_journals[i].name)
+
+    logger.info("Finished adding new systems")
 
 
 def add_systems_from_journal(journal_path):

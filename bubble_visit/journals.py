@@ -1,4 +1,7 @@
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_windows_path() -> str:
@@ -11,7 +14,10 @@ def is_journal_file(name: str) -> bool:
 
 def read_events(journal_path):
     with open(journal_path) as journal_file:
-        for line in journal_file:
-            event = json.loads(line)
+        try:
+            for line in journal_file:
+                event = json.loads(line)
 
-            yield event
+                yield event
+        except UnicodeDecodeError as error:
+            logger.exception(f"Unicode decoding error in journal '{journal_path}'", exc_info=error)
