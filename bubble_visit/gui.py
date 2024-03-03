@@ -37,6 +37,16 @@ def run():
     frame = ttk.Frame(main_window, padding=10)
     frame.pack()
 
+    coordinate_frame = ttk.LabelFrame(frame, text="Coordinates", padding=10)
+    coordinate_frame.pack()
+
+    ttk.Label(coordinate_frame, text="X", padding=5).grid(row=0, column=0)
+    ttk.Entry(coordinate_frame, width=5).grid(row=0, column=1)
+    ttk.Label(coordinate_frame, text="Y", padding=5).grid(row=1, column=0)
+    ttk.Entry(coordinate_frame, width=5).grid(row=1, column=1)
+    ttk.Label(coordinate_frame, text="Z", padding=5).grid(row=2, column=0)
+    ttk.Entry(coordinate_frame, width=5).grid(row=2, column=1)
+
     system_count_frame = ttk.Frame(frame, padding=10)
     system_count_frame.pack()
 
