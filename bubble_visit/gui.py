@@ -6,6 +6,7 @@ import logging
 from bubble_visit.database import Database
 from bubble_visit import configuration, journals
 from bubble_visit.components.coordinates import SectorCoordinates
+from bubble_visit.components.system_counts import SystemCounts
 
 
 VERSION = "0.1.0"
@@ -41,14 +42,8 @@ def run():
     coordinates = SectorCoordinates(frame)
     coordinates.pack()
 
-    system_count_frame = ttk.Frame(frame, padding=10)
-    system_count_frame.pack()
-
-    sector_sys_label = ttk.Label(system_count_frame, text="Visited systems in sector: 0")
-    sector_sys_label.pack()
-
-    bounds_sys_label = Label(system_count_frame, text="Visited systems in bounds: 0")
-    bounds_sys_label.pack()
+    system_counts = SystemCounts(frame)
+    system_counts.pack()
 
     button = ttk.Button(frame, text="Mark sector as finished")
     button.pack()
