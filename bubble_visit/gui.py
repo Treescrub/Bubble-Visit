@@ -40,13 +40,13 @@ def run():
     frame.pack()
 
     coordinates = SectorCoordinates(frame)
-    coordinates.pack()
+    coordinates.grid(row=0, column=0)
 
     system_counts = SystemCounts(frame)
-    system_counts.pack()
+    system_counts.grid(row=0, column=1)
 
     button = ttk.Button(frame, text="Mark sector as finished")
-    button.pack()
+    button.grid(row=1, column=0)
 
     setup_menu()
 
