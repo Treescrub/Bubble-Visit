@@ -13,11 +13,8 @@ def is_journal_file(name: str) -> bool:
 
 
 def read_events(journal_path):
-    with open(journal_path) as journal_file:
-        try:
-            for line in journal_file:
-                event = json.loads(line)
+    with open(journal_path, encoding="utf-8") as journal_file:
+        for line in journal_file:
+            event = json.loads(line)
 
-                yield event
-        except UnicodeDecodeError as error:
-            logger.exception(f"Unicode decoding error in journal '{journal_path}'", exc_info=error)
+            yield event
