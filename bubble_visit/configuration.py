@@ -1,14 +1,18 @@
 import platformdirs
-import os
+from pathlib import Path
 
 
 DATABASE_FILENAME = "data.sqlite"
 APP_NAME = "BubbleVisit"
 
 
-def data_folder_path():
+def data_folder_path() -> Path:
     return platformdirs.user_data_path(appname=APP_NAME, appauthor=False)
 
 
-def database_path():
-    return os.path.join(data_folder_path(), DATABASE_FILENAME)
+def get_config_dict() -> dict:
+    pass
+
+
+def database_path() -> Path:
+    return Path(data_folder_path()) / DATABASE_FILENAME
