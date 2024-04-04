@@ -7,6 +7,7 @@ from bubble_visit.database import Database
 from bubble_visit import configuration, journals
 from bubble_visit.components.coordinates import SectorCoordinates
 from bubble_visit.components.system_counts import SystemCounts
+from bubble_visit.components.settings import Settings
 
 
 VERSION = "0.1.0"
@@ -23,6 +24,10 @@ def refresh_systems():
     database_connection.clear_journals()
     database_connection.clear_systems()
     add_systems()
+
+
+def open_settings():
+    Settings(main_window)
 
 
 def run():
@@ -108,5 +113,6 @@ def setup_menu():
 
     menu_file = Menu(menubar)
     menu_file.add_command(label="Refresh system data", command=refresh_systems)
+    menu_file.add_command(label="Settings", command=open_settings)
 
     menubar.add_cascade(menu=menu_file, label="File")
