@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import pathlib
 import logging
+from typing import Optional
 
 from bubble_visit.database import Database
 from bubble_visit import configuration, journals
@@ -15,6 +16,7 @@ LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 database_connection: Database
 main_window: Tk
+settings_window: Optional[Toplevel] = None
 
 logging.basicConfig(filename=configuration.data_folder_path() / "bubblevisit.log", level=logging.INFO, format=LOG_FORMAT)
 logger = logging.getLogger(__name__)
@@ -27,7 +29,21 @@ def refresh_systems():
 
 
 def open_settings():
-    Settings(main_window)
+    global settings_window
+
+    if settings_window:
+        settings_window.lift()
+        return
+
+    settings_window = Settings(main_window)
+    settings_window.protocol("WM_DELETE_WINDOW", on_settings_close)
+
+
+def on_settings_close():
+    global settings_window
+
+    settings_window.destroy()
+    settings_window = None
 
 
 def run():
